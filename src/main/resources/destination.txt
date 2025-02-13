@@ -1,0 +1,307 @@
+linear search
+what is linear search?
+linear search is one of the simplest searching algorithms used to find a target value within a list or array. it works by checking each element in the list one by one until the target element is found or the end of the list is reached.
+how linear search works:
+sequential check:
+the algorithm starts from the first element of the array (or list) and compares it with the target value.
+element comparison:
+if the current element matches the target, the algorithm returns the index of the element (or any other information such as the element itself). if the element does not match, the algorithm proceeds to the next element in the list.
+termination:
+the search process continues until either:
+the target is found and its position is returned.
+the entire list is traversed without finding the target, in which case the algorithm returns a result indicating that the target does not exist in the list (usually -1 or null).
+characteristics of linear search:
+unsorted lists:
+linear search can be applied to both sorted and unsorted lists or arrays. this is a key difference from more efficient algorithms like binary search, which requires the list to be sorted.
+time complexity:
+the time complexity of linear search is o(n), where n is the number of elements in the list. this means that in the worst case, the algorithm will check each element once.
+best-case: the best case occurs when the target element is found at the first position, giving a time complexity of o(1).
+worst-case: the worst case occurs when the target element is either absent or located at the last position in the list, giving a time complexity of o(n).
+space complexity:
+linear search operates in o(1) space, meaning it requires a constant amount of additional space regardless of the size of the input list. this is because the algorithm does not create any new data structures during its execution.
+comparisons:
+the number of comparisons made by a linear search can vary depending on the position of the target element. in the worst case, the number of comparisons is equal to the number of elements in the list, but in the best case, it is just 1.
+when to use linear search?
+simple lists or arrays:
+linear search is ideal for simple scenarios where the list is not very large or the list does not need to be sorted beforehand.
+unsorted data:
+linear search can be used when the data is unsorted and there is no time or requirement to sort it before searching.
+small data sets:
+for small-sized datasets, the overhead of more complex algorithms (like binary search) may not be necessary. linear search is straightforward and easy to implement.
+multiple occurrences:
+linear search can also be used if you need to find all occurrences of a target value, as it simply checks each element without any restrictions on duplicates.
+advantages of linear search:
+simplicity:
+linear search is easy to implement and understand. it's often used when other search algorithms (like binary search) are not needed or are too complex.
+works with unsorted data:
+unlike binary search, which requires sorted data, linear search works regardless of whether the data is sorted or not.
+no additional space required:
+linear search has o(1) space complexity, meaning it doesn’t require additional memory allocation, unlike algorithms that might need auxiliary data structures.
+disadvantages of linear search:
+inefficiency for large data:
+linear search can be inefficient for large datasets since it may need to traverse the entire list in the worst case. for larger data, algorithms like binary search (for sorted data) or hashing are often preferred due to their better time complexity.
+slow performance in comparison to other algorithms:
+since it checks each element sequentially, its performance deteriorates with the size of the list. this makes it less suitable for large datasets, especially when faster alternatives exist.
+
+
+problem statement: word search in a large text file using linear search
+approach
+1. read the file
+we will read the contents of the file and store the words in an array.
+2. extract words
+we'll extract individual words from each line in the file. this requires handling whitespace and punctuation correctly, to ensure that each word is correctly isolated.
+3. implement linear search
+we will then perform a linear search across the words (stored in an array) to find the target word.
+4. use arrays instead of collections
+we’ll use basic arrays for storing the words and performing the search. since we can't use arraylist or other data structures, we'll use a simple string[] array to store the words.
+5. hashmap for optimized word count (optional)
+although we’re not allowed to use arraylist or hashmap from the collection framework, you could implement a basic version of a hash map manually using a custom array of pairs (or string[] with indices for each word) to map words to positions or counts, which is helpful for optimization, especially in large files.
+
+step-by-step solution
+1. read words from the file
+we'll use a bufferedreader to read each line of the file. each line will be split into words, which will be stored in a manually managed array.
+2. word extraction and normalization
+we will normalize the words by:
+converting them to lowercase (case-insensitive search).
+removing punctuation characters.
+storing them in an array.
+3. linear search implementation
+after storing the words, we will implement a simple linear search by looping through the array to find the target word.
+4. hashmap-like functionality
+to store word positions for quick access or to count occurrences, we can implement a manual hash table using arrays. for this, we need to:
+create an array of string[] where each index represents a word, and the value stored in that index will be its position (or occurrence).
+implementation example in java
+import java.io.*;
+import java.util.hashmap;
+
+public class linearsearchfile {
+    public static void main(string[] args) {
+        string filepath = "large_text_file.txt"; // path to the text file
+        string targetword = "java"; // word to search
+
+        // step 1: read words from file
+        string[] words = readwordsfromfile(filepath);
+        if (words == null) {
+            system.out.println("error reading the file.");
+            return;
+        }
+
+        // step 2: perform linear search
+        int index = linearsearch(words, targetword);
+        if (index != -1) {
+            system.out.println("word '" + targetword + "' found at index: " + index);
+        } else {
+            system.out.println("word '" + targetword + "' not found.");
+        }
+    }
+
+    // method to read words from a file and store in an array
+    private static string[] readwordsfromfile(string filepath) {
+        try (bufferedreader br = new bufferedreader(new filereader(filepath))) {
+            stringbuilder sb = new stringbuilder();
+            string line;
+            while ((line = br.readline()) != null) {
+                // normalize by removing punctuation and making words lowercase
+                sb.append(line.tolowercase().replaceall("[^a-za-z ]", "")).append(" ");
+            }
+            return sb.tostring().split("\\s+"); // convert to array of words
+        } catch (ioexception e) {
+            e.printstacktrace();
+            return null;
+        }
+    }
+
+    // simple linear search implementation
+    private static int linearsearch(string[] words, string target) {
+        target = target.tolowercase();  // normalize target word to lowercase
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].equals(target)) {
+                return i; // word found, return index
+            }
+        }
+        return -1; // word not found
+    }
+}
+
+explanation of the code:
+reading the file:
+we read the file using a bufferedreader and convert the content to a stringbuilder for efficient text manipulation.
+the replaceall("[^a-za-z ]", "") removes any characters that are not alphabets or spaces (like punctuation and digits).
+the split("\\s+") splits the content into words based on whitespace, storing them in a string[] array.
+linear search:
+we implement the linear search where we loop through each word in the string[] array, converting the target word to lowercase for case-insensitivity.
+if we find a match, we return the index of the word in the array; otherwise, return -1.
+word positioning (optional hashmap-like functionality):
+if you wanted to track positions of each word (like a frequency count or where the word appeared), you could implement a basic hash table.
+you could store the words and their positions in a custom array. this would optimize future searches if you need to access specific word positions quickly.
+time complexity:
+operation
+time complexity
+file reading
+o(n) (n = number of characters in the file)
+word splitting
+o(m) (m = number of words)
+linear search
+o(m) (m = number of words)
+
+thus, the overall time complexity is o(n + m), where n is the number of characters in the file and m is the number of words. the linear search step takes linear time, so the efficiency is based on the number of words found in the file.
+
+
+binary search
+binary search is an efficient searching algorithm used to find an element in a sorted dataset. unlike linear search, which checks each element one by one, binary search repeatedly divides the search space in half, reducing the time complexity to o(log n).
+how binary search works
+precondition: the dataset must be sorted.
+find the middle element:
+compare the middle element with the target value.
+if the middle element is the target, return its index.
+if the target is smaller, search in the left half.
+if the target is larger, search in the right half.
+repeat the process until the element is found or the search space is empty.
+time complexity analysis
+best case: o(1) → when the middle element is the target.
+worst case: o(log n) → when the search space is continuously divided until only one element remains.
+average case: o(log n) → since each step reduces the search space exponentially.
+binary search variants
+iterative binary search
+uses a while loop to perform repeated comparisons.
+preferred when recursion depth is a concern.
+recursive binary search
+uses function calls to divide the search space.
+preferred for a cleaner and structured approach but may lead to stack overflow for very large data.
+lower bound (first occurrence) binary search
+finds the first occurrence of the target element in a sorted list with duplicates.
+upper bound (last occurrence) binary search
+finds the last occurrence of the target element in a sorted list with duplicates.
+binary search on an infinite data stream
+used when the data size is unknown or unbounded (e.g., searching in logs, search engines, large files).
+binary search in 2d arrays or matrices
+applied when searching in sorted matrices, reducing search space efficiently.
+binary search on answer approach
+used in problems where we search for a minimum or maximum possible answer (e.g., "minimum days to ship packages", "allocate books", "kth smallest element in a sorted matrix").
+applications of binary search
+searching in sorted arrays and lists.
+finding the square root of a number without using sqrt().
+searching in rotated sorted arrays.
+solving optimization problems using the binary search on answer technique.
+used in divide and conquer algorithms like merge sort.
+binary search for words in a large text file
+approach
+read words from the file: use bufferedreader to read lines from a file efficiently.
+store words in an array: extract words and store them in a manually managed array.
+sort the array: implement a custom sorting algorithm (e.g., quicksort or mergesort).
+binary search on the sorted array: implement a custom binary search algorithm.
+use hashmap for quick lookup (optional): store word positions to optimize search.
+
+implementation
+import java.io.*;
+import java.util.hashmap;
+
+public class binarysearchtextfilewithoutcollections {
+    public static void main(string[] args) {
+        string filepath = "large_text_file.txt"; // path to the text file
+        string targetword = "example"; // word to search
+
+        // read words from file and store in an array
+        string[] words = readwordsfromfile(filepath);
+        if (words == null) {
+            system.out.println("error reading the file.");
+            return;
+        }
+
+        // sort the words manually using quicksort
+        quicksort(words, 0, words.length - 1);
+
+        // perform binary search
+        int index = binarysearch(words, targetword);
+        if (index != -1) {
+            system.out.println("word found at index: " + index);
+        } else {
+            system.out.println("word not found.");
+        }
+    }
+
+    // method to read words from a file and store in an array
+    private static string[] readwordsfromfile(string filepath) {
+        try (bufferedreader br = new bufferedreader(new filereader(filepath))) {
+            stringbuilder sb = new stringbuilder();
+            string line;
+            while ((line = br.readline()) != null) {
+                sb.append(line.tolowercase().replaceall("[^a-za-z ]", "")).append(" ");
+            }
+            return sb.tostring().split("\\s+"); // convert text into words array
+        } catch (ioexception e) {
+            e.printstacktrace();
+            return null;
+        }
+    }
+
+    // custom quicksort for sorting words
+    private static void quicksort(string[] arr, int low, int high) {
+        if (low < high) {
+            int pi = partition(arr, low, high);
+            quicksort(arr, low, pi - 1);
+            quicksort(arr, pi + 1, high);
+        }
+    }
+
+    private static int partition(string[] arr, int low, int high) {
+        string pivot = arr[high];
+        int i = (low - 1);
+        for (int j = low; j < high; j++) {
+            if (arr[j].compareto(pivot) <= 0) {
+                i++;
+                string temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+        string temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+        return i + 1;
+    }
+
+    // custom binary search
+    private static int binarysearch(string[] words, string target) {
+        int left = 0, right = words.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int cmp = words[mid].compareto(target);
+
+            if (cmp == 0) return mid; // word found
+            else if (cmp < 0) left = mid + 1; // search right
+            else right = mid - 1; // search left
+        }
+        return -1; // word not found
+    }
+}
+
+
+optimized approach with hashmap for quick lookup
+instead of searching the entire array, we can use a hashmap<string, integer> to store words and their positions.
+this reduces the search complexity to o(1) for lookup.
+
+private static hashmap<string, integer> buildwordindex(string[] words) {
+    hashmap<string, integer> wordindex = new hashmap<>();
+    for (int i = 0; i < words.length; i++) {
+        wordindex.put(words[i], i);
+    }
+    return wordindex;
+}
+
+
+time complexity analysis
+operation
+complexity
+reading file
+o(n)
+sorting (quicksort)
+o(n log n)
+binary search
+o(log n)
+using hashmap (if used)
+o(1)
+gourav
+
+
+
